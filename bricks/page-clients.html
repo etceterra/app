@@ -1,13 +1,18 @@
 <template>
   <h1>Clients</h1>
+  <form class=block>
+    <label>Rechercher un client</label>
+    <input name=name required>
+  </form>
   <section class="tile">
     <article :for="user in state.users" class="block">
-      <h1>${ user.name }</h1>
+      <h3>${ user.name }</h3>
+      <h4>${ user.city }</h4>
       <p>
-        <small>Age: ${ user.age }</small>
+        <small>${ user.age } ans</small>
       </p>
       <nav>
-        <a href="/client/${ user.id }" class="button primary">edit</a>
+        <a href="/client/${ user.id }" class="button primary">Consulter</a>
       </nav>
     </article>
   </section>
@@ -17,8 +22,8 @@
   init() {
     this.state = {
       users: [
-        { id: 1, name: 'John Doe', age: 30 },
-        { id: 2, name: 'Jess Dean', age: 40 },
+        { id: 1, name: 'John Doe', age: 30, city: "Geneve" },
+        { id: 2, name: 'Jess Dean', age: 40, city: "Nyon" },
       ]
     }
   }
@@ -29,5 +34,12 @@
 
   .tile {
     display: flex;
+  }
+
+  article h3,
+  article h4,
+  article p {
+    padding: 0;
+    margin: 0;
   }
 </style>

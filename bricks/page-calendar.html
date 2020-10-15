@@ -1,0 +1,20 @@
+<template>
+  <div id="calendar"></div>
+</template>
+
+<script>
+  connected() {
+    this.render()
+    const container = this.document.querySelector('#calendar')
+    const calendar = new FullCalendar.Calendar(container, {
+      initialView: '',
+      events: '/assets/calendar.json'
+    })
+    calendar.render()
+  }
+</script>
+
+<style>
+  @import url("/assets/css/dashboard.css");
+  @import url("https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.css");
+</style>

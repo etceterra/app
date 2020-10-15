@@ -1,16 +1,16 @@
 <template>
   <section class="menu">
     <header>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/archive/4/4e/20160311154844%21Open_Source_Initiative_keyhole.svg" alt="Logo">
-      <h1>Open Dashboard</h1>
+      <img src="/assets/img/naturapeute-logo.svg" alt="Logo">
+      <h1>Naturapeute <small>Pro</small></h1>
     </header>
     <nav>
-      <a href="/" :active="state.page === 'dashboard'">Dashboard</a>
+      <a href="/" :active="state.page === 'calendar'">Agenda</a>
       <a href="/clients":active="state.page.startsWith('client')">Clients</a>
     </nav>
   </section>
   <section name="center">
-    <page-dashboard :if="state.page === 'dashboard'"></page-dashboard>
+    <page-calendar :if="state.page === 'calendar'" :id="state.clientId"></page-calendar>
     <page-clients :if="state.page === 'clients'"></page-clients>
     <page-client :if="state.page === 'client'" :id="state.clientId"></page-client>
   </section>
@@ -24,7 +24,7 @@
     }
 
     page('/', () => {
-      this.render({ page: 'dashboard' })
+      this.render({ page: 'calendar' })
     })
 
     page('/clients', () => {
@@ -46,6 +46,10 @@
     flex-grow: 1;
     display: flex;
     flex-direction: row;
+  }
+
+  header img {
+    margin-bottom: 1rem !important;
   }
 
   nav[selected] {
