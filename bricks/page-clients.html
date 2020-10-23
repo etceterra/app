@@ -1,18 +1,27 @@
 <template>
-  <h1>Clients</h1>
+  <h1>Patients</h1>
   <form class=block>
-    <label>Rechercher un client</label>
+    <label>Rechercher un patient</label>
     <input name=name required>
   </form>
   <section class="tile">
-    <article :for="user in state.users" class="block">
-      <h3>${ user.name }</h3>
-      <h4>${ user.city }</h4>
-      <p>
-        <small>${ user.age } ans</small>
-      </p>
+    <article :for="patient in state.patients" class="block">
+      <img src="https://randomuser.me/api/portraits/men/1.jpg">
+      <h3 title="${ patient.firstname } ${ patient.lastname }">${ patient.firstname } ${ patient.lastname }</h3>
+      <section>
+        <p :if="patient.birthdate">
+          <small>${ getAge(patient.birthdate) } ans</small>
+        </p>
+        <p :if="patient.city">${ patient.city }</p>
+      </section>
       <nav>
-        <a href="/client/${ user.id }" class="button primary">Consulter</a>
+        <a href="/patient/${ patient.uid }/edit" class="button primary" :id="patient.uid">Consulter</a>
+      </nav>
+    </article>
+
+    <article class="block">
+      <nav>
+        <a href="/patient" class="button primary">Nouveau patient</a>
       </nav>
     </article>
   </section>
@@ -21,11 +30,21 @@
 <script>
   init() {
     this.state = {
-      users: [
-        { id: 1, name: 'John Doe', age: 30, city: "Geneve" },
-        { id: 2, name: 'Jess Dean', age: 40, city: "Nyon" },
-      ]
+      patients: []
     }
+  }
+
+  async connected() {
+    const response = await api.get(`{
+      patients(func: type(Patient)) @filter(has(lastname)) {
+        uid
+        firstname
+        lastname
+        city
+        birthdate
+      }
+    }`)
+    this.render({ patients: response.data.patients })
   }
 </script>
 
@@ -34,6 +53,21 @@
 
   .tile {
     display: flex;
+    flex-wrap: wrap;
+  }
+  .tile nav {
+    margin-top: .5rem;
+  }
+
+  article {
+    display: grid;
+    grid-template:
+      'pic name'
+      'pic info'
+      'pic nav'
+    ;
+    width: 20rem;
+    min-height: 5rem;
   }
 
   article h3,
@@ -41,5 +75,27 @@
   article p {
     padding: 0;
     margin: 0;
+  }
+
+  article h3 {
+    grid-area: name;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  article section {
+    grid-area: info;
+  }
+
+  article nav {
+    grid-area: nav;
+  }
+
+  article img {
+    grid-area: pic;
+    border-radius: 50%;
+    width: 4.4rem;
+    margin: 0 1rem 1rem 0;
   }
 </style>

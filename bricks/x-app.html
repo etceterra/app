@@ -6,13 +6,14 @@
     </header>
     <nav>
       <a href="/" :active="state.page === 'calendar'">Agenda</a>
-      <a href="/clients":active="state.page.startsWith('client')">Clients</a>
+      <a href="/patients":active="state.page.startsWith('client')">Patients</a>
     </nav>
   </section>
   <section name="center">
     <page-calendar :if="state.page === 'calendar'" :id="state.clientId"></page-calendar>
     <page-clients :if="state.page === 'clients'"></page-clients>
     <page-client :if="state.page === 'client'" :id="state.clientId"></page-client>
+    <page-client-edit :if="state.page === 'client-edit'" :id="state.clientId"></page-client-edit>
   </section>
   <section name="right"></section>
 </template>
@@ -27,12 +28,20 @@
       this.render({ page: 'calendar' })
     })
 
-    page('/clients', () => {
-      this.render({ page: 'clients' })
+    page('/patients', () => {
+      this.render({ page: 'clients', clientId: null })
     })
 
-    page('/client/:id', (req) => {
+    page('/patient/:id', (req) => {
       this.render({ page: 'client', clientId: req.params.id })
+    })
+
+    page('/patient/:id/edit', (req) => {
+      this.render({ page: 'client-edit', clientId: req.params.id })
+    })
+
+    page('/patient', (req) => {
+      this.render({ page: 'client-edit' })
     })
 
     page({ hashbang: true, click: true })
@@ -50,9 +59,5 @@
 
   header img {
     margin-bottom: 1rem !important;
-  }
-
-  nav[selected] {
-
   }
 </style>

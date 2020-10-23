@@ -1,17 +1,23 @@
-@import url('http://cdnlib.net/ar/font/open-sans/Open-Sans.woff2');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
 :root {
   --background-color: #f9f9f6
 }
-body {
-  background-color: var(--background-color);
+html {
+  font-size: 19px;
+  font-weight: 300;
 }
 
-h1 { font-size: 1.3rem; }
-h2 { font-size: 1.1rem; }
-h3 { font-size: 1rem; }
-h4 { font-size: 1rem; font-weight: normal; }
-h5 { font-size: 1rem; font-weight: normal; }
+body {
+  background-color: var(--background-color);
+  font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+h1 { font-size: 1.3rem; font-weight: inherit; }
+h2 { font-size: 1.1rem; font-weight: inherit; }
+h3 { font-size: 1rem; font-weight: normal; }
+h4 { font-size: .9rem; font-weight: normal; }
+h5 { font-size: .8rem; font-weight: normal; }
 
 section[name="center"] {
   flex-grow: 1;
@@ -22,6 +28,7 @@ section[name="center"] {
   background-color: #333;
   padding: 1rem;
   min-height: 100vh;
+  min-width: 250px;
 }
 .menu header {
   color: #fff;
@@ -32,7 +39,7 @@ section[name="center"] {
 }
 .menu header img {
   display: block;
-  max-height: 100px;
+  height: 50px;
   margin: 0 auto;
 }
 .menu nav a {
@@ -76,10 +83,9 @@ table th {
 
 .block {
   background-color: #fff;
-  padding: 1rem 2rem;
+  padding: .8rem 2rem;
   border-radius: .3rem;
-  border: 1px solid #ddd;
-  box-shadow: 0 0 .2rem rgba(150, 150, 150, .2);
+  box-shadow: 0 0 .1rem rgba(150, 150, 150, .2);
   margin: 0 1rem 1rem 0;
 }
 

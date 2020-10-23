@@ -1,0 +1,108 @@
+<template>
+  <h1 :if="state.clientId">Modifier la fiche de ${ state.firstname } ${ state.lastname }</h1>
+  <h1 :if="!state.clientId">Créer un nouveau patient</h1>
+
+  <form class="block" @submit="save">
+    <input type=hidden name="uid" :value="state.patient.uid">
+    <fieldset>
+      <h3>Informations générales</h3>
+      <div class="row">
+        <label>Prénom</label>
+        <input name="firstname" :value="state.patient.firstname" required>
+
+        <label>Nom</label>
+        <input name="lastname" :value="state.patient.firstname" required>
+      </div>
+
+      <div class="row">
+        <label>Genre</label>
+        <select name=gender required>
+          <option value="" :selected="state.patient.gender === ''"> --- </option>
+          <option value="man" :selected="state.patient.gender === 'man'">Monsieur</option>
+          <option value="woman" :selected="state.patient.gender === 'woman'">Madame/Mlle</option>
+        </select>
+
+        <label>Date de naissance</label>
+        <input name="birthdate" type=date required :value="state.patient.birthdate">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Contact</h3>
+      <div class="row">
+        <label>Adresse email</label>
+        <input name="email" type=email :value="state.patient.email">
+      </div>
+      <div class="row">
+        <label>Téléphone portable</label>
+        <input name="mobile" :value="state.patient.mobile">
+        <label>Téléphone fixe/alternatif</label>
+        <input name="phone" :value="state.patient.phone">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Adresse</h3>
+      <div class="row">
+        <label>Rue et numéro</label>
+        <input name="street" :value="state.patient.street">
+      </div>
+      <div class="row">
+        <label>Complément d'adresse</label>
+        <input name="street2" :value="state.patient.street2">
+      </div>
+      <div class="row">
+        <label>NPA</label>
+        <input name="zipcode" :value="state.patient.zipcode">
+        <label>Ville</label>
+        <input name="city" :value="state.patient.city">
+      </div>
+    </fieldset>
+
+    <footer class="row">
+      <button class="primary">Enregistrer</button>
+      <a href="/patients" class="button">Retour</a>
+    </footer>
+  </form>
+</template>
+
+<script>
+  init() {
+    this.state = {
+      patient: {},
+      id: null,
+    }
+  }
+
+  async connected() {
+    const response = await api.get(`{
+      patients(func: uid(${this.state.id})) {
+        uid
+        firstname
+        lastname
+        gender
+        birthdate
+        mobile
+        phone
+        email
+        street
+        street2
+        zipcode
+        city
+      }
+    }`)
+    if(response.ok) this.render({ patient: response.data.patients[0] })
+  }
+
+  async save(event) {
+    event.preventDefault()
+    const data = serializeForm(event.target)
+    data['dgraph.type'] = 'Patient'
+    const response = await api.post(data)
+    if(response.ok) page('/patients')
+  }
+</script>
+
+<style>
+  @import url('/assets/css/main.css');
+</style>
