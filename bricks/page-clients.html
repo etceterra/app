@@ -1,8 +1,9 @@
 <template>
-  <form class=block>
+  <!-- <form class=block>
     <label>Rechercher un patient</label>
     <input name=name required>
-  </form>
+  </form> -->
+
   <section class="tile">
     <article :for="patient in state.patients" class="block">
       <img src="http://www.gravatar.com/avatar/${ md5(patient.email) }?s=80&d=https://www.beautifulpeople.com/cdn/beautifulpeople/images/default_profile/signup_${ (patient.gender == 'woman') ? 'fe' : '' }male.png">
@@ -14,16 +15,14 @@
         <p :if="patient.city">${ patient.city }</p>
       </section>
       <nav>
-        <a href="/patient/${ patient.uid }/edit" class="button primary" :id="patient.uid">Voir la fiche</a>
-      </nav>
-    </article>
-
-    <article class="block">
-      <nav>
-        <a href="/patient" class="button primary">Nouveau patient</a>
+        <a href="/patient/${ patient.uid }/edit" class="button" :id="patient.uid">Consulter</a>
       </nav>
     </article>
   </section>
+
+  <footer>
+    <a href="/patient" class="button primary">Ajouter un patient</a>
+  </footer>
 </template>
 
 <script>
@@ -58,6 +57,10 @@
   }
   .tile nav {
     margin-top: .5rem;
+  }
+
+  footer {
+    margin-top: 2rem;
   }
 
   article {
@@ -98,5 +101,9 @@
     border-radius: 50%;
     width: 4.4rem;
     margin: 0 1rem 1rem 0;
+  }
+
+  article .button {
+    width: 100%;
   }
 </style>
