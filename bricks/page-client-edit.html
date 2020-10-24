@@ -1,6 +1,6 @@
 <template>
-  <h1 :if="state.clientId">Modifier la fiche de ${ state.firstname } ${ state.lastname }</h1>
-  <h1 :if="!state.clientId">Créer un nouveau patient</h1>
+  <h1 :if="state.patient.uid">Modifier la fiche de ${ state.firstname } ${ state.lastname }</h1>
+  <h1 :if="!state.patient.uid">Créer un nouveau patient</h1>
 
   <form class="block" @submit="save">
     <input type=hidden name="uid" :value="state.patient.uid">
