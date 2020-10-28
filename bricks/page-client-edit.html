@@ -75,7 +75,7 @@
   }
 
   async connected() {
-    const response = await api.get(`{
+    const response = await gql.query(`{
       patients(func: uid(${this.state.id})) {
         uid
         firstname
@@ -98,7 +98,7 @@
     event.preventDefault()
     const data = serializeForm(event.target)
     data['dgraph.type'] = 'Patient'
-    const response = await api.post(data)
+    const response = await gql.mutate(data)
     if(response.ok) page('/patients')
   }
 </script>

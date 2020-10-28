@@ -1,15 +1,22 @@
 <template>
-  <section class="menu">
+  <section class="menu" :if="state.user">
     <header>
       <img src="/assets/img/naturapeute-logo.svg" alt="Logo">
       <h1>Naturapeute <small>Pro</small></h1>
     </header>
+    <section id="current-user">
+      <x-gravatar size=44 email="${state.user.email}"></x-gravatar>
+      <span>${state.user.firstname} ${state.user.lastname}</span>
+    </section>
     <nav>
       <a href="/" :active="state.page === 'calendar'"><i class="far fa-calendar"></i>Agenda</a>
-      <a href="/patients":active="state.page.startsWith('client')"><i class="far fa-user"></i>Patients</a>
+      <a href="/patients" :active="state.page.startsWith('client')"><i class="far fa-user"></i>Patients</a>
+      <hr>
+      <a href="/logout"><i class="far fa-times-circle"></i>Quitter</a>
     </nav>
   </section>
   <section name="center">
+    <page-login :if="state.page === 'login'"></page-login>
     <page-calendar :if="state.page === 'calendar'" :id="state.clientId"></page-calendar>
     <page-clients :if="state.page === 'clients'"></page-clients>
     <page-client :if="state.page === 'client'" :id="state.clientId"></page-client>
@@ -20,8 +27,11 @@
 
 <script>
   init() {
+    window.app = this
+
     this.state = {
-      page: ''
+      page: '',
+      user: null,
     }
 
     page('/', () => {
@@ -30,6 +40,15 @@
 
     page('/patients', () => {
       this.render({ page: 'clients', clientId: null })
+    })
+
+    page('/login', () => {
+      this.render({ page: 'login' })
+    })
+
+    page('/logout', () => {
+      this.setUser(null)
+      page('/login')
     })
 
     page('/patient/:id', (req) => {
@@ -45,6 +64,15 @@
     })
 
     page({ hashbang: true, click: true })
+  }
+
+  setUser(data = {}) {
+    localStorage.user = JSON.stringify(data || undefined)
+    this.setState({ user: data })
+  }
+
+  connected() {
+    this.setUser(JSON.parse(localStorage.user || '{}'))
   }
 </script>
 
@@ -63,5 +91,17 @@
 
   header img {
     margin-bottom: 1rem !important;
+  }
+
+  #current-user {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #555;
+    margin-bottom: 1rem;
+  }
+  #current-user span {
+    margin-left: 1rem;
+    color: white;
   }
 </style>

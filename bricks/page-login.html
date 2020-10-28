@@ -1,0 +1,51 @@
+<template>
+  <header>
+    <img src="/assets/img/naturapeute-logo.svg" alt="Logo">
+    <h1>Naturapeute <small>Pro</small></h1>
+  </header>
+  <section class=block>
+    <h1>Accéder à mon compte sécurisé</h1>
+    <form @submit=send>
+      <div class=row>
+        <label>Email</label>
+        <input type=email name=email required>
+      </div>
+      <div class=row>
+        <label>Mot de passe</label>
+        <input type=password name=password required>
+      </div>
+      <footer>
+        <button class="primary">Valider</button>
+      </footer>
+    </form>
+  </section>
+</template>
+
+<style>
+  @import url('/assets/css/main.css');
+  header {
+    margin: 3rem auto;
+    text-align: center;
+  }
+  header img {
+    max-width: 3rem;
+  }
+
+  section.block {
+    max-width: 40rem;
+    margin: auto;
+  }
+</style>
+
+<script>
+  async send(event) {
+    event.preventDefault()
+    const email = event.target.email.value
+    const response = await request('GET', `https://naturapeute.ch/api/therapist/${email}`)
+    if(response.ok) {
+      localStorage.user = JSON.stringify(response.data)
+      app.setUser(response.data)
+      page('/')
+    }
+  }
+</script>

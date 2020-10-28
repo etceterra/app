@@ -1,0 +1,26 @@
+<template>
+  <img
+    src="http://www.gravatar.com/avatar/${state.hash}?s=${state.size}&d=https://www.beautifulpeople.com/cdn/beautifulpeople/images/default_profile/signup_${state.gender == 'man' ? '' : 'fe'}male.png" height="${state.size}">
+</template>
+
+<script>
+  init() {
+    this.state = {
+      gender: 'man',
+      size: 88,
+      email: '',
+      hash: '',
+    }
+  }
+
+  connected() {
+    const email = this.state.email
+    if(email) this.render({ hash: md5(email) })
+  }
+</script>
+
+<style>
+  img {
+    border-radius: 50%;
+  }
+</style>

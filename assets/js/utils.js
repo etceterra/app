@@ -1,10 +1,12 @@
-window.api = {
-  async get(query) {
-    return request('POST', '/query?timeout=10s', { query: String(query) })
+window.gql = {
+  async query(query) {
+    const response = await request('POST', 'http://localhost:8080/query?timeout=10s', { query: String(query) })
+    if(response.ok) return response.data
   },
 
-  async post(body) {
-    return request('POST', '/mutate?commitNow=true', { set: Array.isArray(body) ? body : [body] })
+  async mutate(body) {
+    const response = await request('POST', 'http://localhost:8080/mutate?commitNow=true', { set: Array.isArray(body) ? body : [body] })
+    if(response.ok) return response.data
   }
 }
 
@@ -15,13 +17,12 @@ function serializeForm(form) {
   }, {})
 }
 
-async function request(method, uri, body, options = {}) {
-  options.body = body ? JSON.stringify(body) : ""
+async function request(method, url, body, options = {}) {
+  options.body = body ? JSON.stringify(body) : null
   options.method = method
   if(!options.headers) options.headers = {}
   options.headers['Content-Type'] = 'application/json'
-  // options.headers = { 'API-KEY': localStorage.token }
-  const response = await fetch(`http://localhost:8080${uri}`, options)
+  const response = await fetch(url, options)
   let content = {}
   try {
     content = await response.json()
@@ -31,8 +32,8 @@ async function request(method, uri, body, options = {}) {
   }
 
   if(response.errors) response.ok = false
-  else response.data = content.data
-  if(!response.ok && response.data) alert(response.errors[0].message)
+  else response.data = content
+  if(!response.ok && response.errors) alert(response.errors[0].message)
   return response
 }
 

@@ -6,7 +6,7 @@
 
   <section class="tile">
     <article :for="patient in state.patients" class="block">
-      <img src="http://www.gravatar.com/avatar/${ md5(patient.email) }?s=80&d=https://www.beautifulpeople.com/cdn/beautifulpeople/images/default_profile/signup_${ (patient.gender == 'woman') ? 'fe' : '' }male.png">
+      <x-gravatar :email="patient.email" :gender="patient.gender"></x-gravatar>
       <h3 title="${ patient.firstname } ${ patient.lastname }">${ patient.firstname } ${ patient.lastname }</h3>
       <section>
         <p :if="patient.birthdate">
@@ -33,7 +33,7 @@
   }
 
   async connected() {
-    const response = await api.get(`{
+    const response = await gql.query(`{
       patients(func: type(Patient)) @filter(has(lastname)) {
         uid
         firstname
@@ -96,9 +96,8 @@
     grid-area: nav;
   }
 
-  article img {
+  article x-gravatar {
     grid-area: pic;
-    border-radius: 50%;
     width: 4.4rem;
     margin: 0 1rem 1rem 0;
   }

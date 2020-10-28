@@ -4,7 +4,7 @@
   "description": "A quick bootstraping dashboard",
   "main": "index.html",
   "dependencies": {
-    "@polight/lego": "^1.3.3",
+    "@polight/lego": "^1.4.1",
     "tui-calendar": "^1.12.14"
   },
   "devDependencies": {
