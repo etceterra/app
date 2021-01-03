@@ -41,10 +41,17 @@
   async send(event) {
     event.preventDefault()
     const email = event.target.email.value
-    const response = await request('GET', `https://naturapeute.ch/api/therapist/${email}`)
-    if(response.ok) {
-      localStorage.user = JSON.stringify(response.data)
-      app.setUser(response.data)
+    const response = await gql.query(`{
+      therapist(email: "${email}") {
+        id
+        firstname
+        lastname
+        email
+      }
+    }`)
+    if(response.data.therapist) {
+      localStorage.user = JSON.stringify(response.data.therapist)
+      app.setUser(response.data.therapist)
       page('/')
     }
   }

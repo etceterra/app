@@ -15,7 +15,7 @@
         <p :if="patient.city">${ patient.city }</p>
       </section>
       <nav>
-        <a href="/patient/${ patient.uid }/edit" class="button" :id="patient.uid">Consulter</a>
+        <a href="/patient/${ patient.id }/edit" class="button" :id="patient.uid">Consulter</a>
       </nav>
     </article>
   </section>
@@ -34,8 +34,8 @@
 
   async connected() {
     const response = await gql.query(`{
-      patients(func: type(Patient)) @filter(has(lastname)) {
-        uid
+      patients(therapist: ${app.state.user.id}) {
+        id
         firstname
         lastname
         city

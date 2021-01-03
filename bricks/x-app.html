@@ -9,7 +9,7 @@
       <span>${state.user.firstname} ${state.user.lastname}</span>
     </section>
     <nav>
-      <a href="/" :active="state.page === 'calendar'"><i class="far fa-calendar"></i>Agenda</a>
+      <a href="/calendar" :active="state.page === 'calendar'"><i class="far fa-calendar"></i>Agenda</a>
       <a href="/patients" :active="state.page.startsWith('client')"><i class="far fa-user"></i>Patients</a>
       <hr>
       <a href="/logout"><i class="far fa-times-circle"></i>Quitter</a>
@@ -35,6 +35,10 @@
     }
 
     page('/', () => {
+      this.render({ page: 'calendar' })
+    })
+
+    page('/calendar', () => {
       this.render({ page: 'calendar' })
     })
 

@@ -1,11 +1,14 @@
+window.apiUrl = document.location.host.includes('localhost')
+  ? 'http://localhost:8000/graphql'
+  : 'https://naturapeute.ch/graphql'
+
 window.gql = {
   async query(query) {
-    const response = await request('POST', 'http://localhost:8080/query?timeout=10s', { query: String(query) })
-    if(response.ok) return response.data
+    return response = await request('POST', apiUrl, { query: String(query) })
   },
 
   async mutate(body) {
-    const response = await request('POST', 'http://localhost:8080/mutate?commitNow=true', { set: Array.isArray(body) ? body : [body] })
+    const response = await request('POST', `${apiUrl}`, { set: Array.isArray(body) ? body : [body] })
     if(response.ok) return response.data
   }
 }
@@ -30,11 +33,14 @@ async function request(method, url, body, options = {}) {
   catch {
     content = {}
   }
+  response.data = content.data
+  response.errors = content.errors
 
-  if(response.errors) response.ok = false
-  else response.data = content
-  if(!response.ok && response.errors) alert(response.errors[0].message)
-  return response
+  // `response.ok` is readonly, forcing it
+  const result = Object.assign({}, response, { ok: !response.errors })
+
+  if(!result.ok && result.errors) alert(result.errors[0].message)
+  return result
 }
 
 function getAge(d1, d2 = new Date()) {

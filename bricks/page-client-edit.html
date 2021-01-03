@@ -1,5 +1,5 @@
 <template>
-  <h1 :if="state.patient.uid">Modifier la fiche de ${ state.firstname } ${ state.lastname }</h1>
+  <h1 :if="state.patient.uid">Modifier la fiche de ${ state.patient.firstname } ${ state.patient.lastname }</h1>
   <h1 :if="!state.patient.uid">Créer un nouveau patient</h1>
 
   <form class="block" @submit="save">
@@ -76,8 +76,8 @@
 
   async connected() {
     const response = await gql.query(`{
-      patients(func: uid(${this.state.id})) {
-        uid
+      patient(id: ${this.state.id}) {
+        id
         firstname
         lastname
         gender
@@ -91,7 +91,8 @@
         city
       }
     }`)
-    if(response.ok) this.render({ patient: response.data.patients[0] })
+    const patient = response.data.patient
+    if(patient) this.render({ patient })
   }
 
   async save(event) {
@@ -99,7 +100,7 @@
     const data = serializeForm(event.target)
     data['dgraph.type'] = 'Patient'
     const response = await gql.mutate(data)
-    if(response.ok) page('/patients')
+    if(response.data) page('/patients')
   }
 </script>
 
